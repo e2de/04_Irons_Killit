@@ -15,10 +15,18 @@ class IRONSKILLIT_API ATankPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
-public:
+private:
 	ATank* GetControlledTank() const;
 	
+	void Tick(float DeltaTime) override;
+
 	virtual void BeginPlay()  override;
+
+	// start tank moving the barrel so show will hit where crosshair intersects world
+	void AimTowardsCrosshair();
+
+	// find where the crosshair is hitting
+	bool GetSightRayHitLocation(FVector&) const;
 
 };
 
