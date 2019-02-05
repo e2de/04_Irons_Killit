@@ -11,9 +11,6 @@
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-
 
 	// ...
 }
@@ -42,29 +39,40 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 								false,
 								0.0f,
 								0.0f,
-								ESuggestProjVelocityTraceOption::TraceFullPath,
+								ESuggestProjVelocityTraceOption::DoNotTrace,
 								FCollisionResponseParams::DefaultResponseParam,
 								TArray<AActor*>(),
 								true);
 
 	if (bHaveAimSolution) {
 		auto AimDirection = TossVelocity.GetSafeNormal();
-		UE_LOG(LogTemp, Warning, TEXT("%s aiming at: %s from %s"), *OurTankName, *HitLocation.ToString(), *(BarrelLocation.ToString()));
-		UE_LOG(LogTemp, Warning, TEXT("%s will fire in this direction: %s"), *OurTankName, (*AimDirection.ToString()));
+		//UE_LOG(LogTemp, Warning, TEXT("%s aiming at: %s from %s"), *OurTankName, *HitLocation.ToString(), *(BarrelLocation.ToString()));
+		//UE_LOG(LogTemp, Warning, TEXT("%s will fire in this direction: %s"), *OurTankName, (*AimDirection.ToString()));
 
-		//MoveBarrel();
+		MoveBarrel(AimDirection);
+		/*auto Time = GetWorld()->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("%f: aim solve called with %s"), Time, (*AimDirection.ToString()) );*/
 	}
+	else {
+		//auto Time = GetWorld()->GetTimeSeconds();
+		//UE_LOG(LogTemp, Warning, TEXT("%f: NO aim solve called already"), Time);
+	}
+
+	
 	
 }
 
 
+
 void UTankAimingComponent::MoveBarrel(FVector AimDirection)
 {
+	if (!Barrel) { return; }
+
 	// find Difference between the current barrel rotation and aim direction
 	auto CurrentBarrel = GetOwner();
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
 
-	Barrel->Elevate(5); // TODO remove magic number
+	Barrel->Elevate(DeltaRotator.Pitch); 
 }
