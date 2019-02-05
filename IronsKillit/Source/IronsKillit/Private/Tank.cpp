@@ -1,10 +1,18 @@
 // copyright Alice Meng 2019
 
 #include "Tank.h"
+#include "TankAimingComponent.h"
+
+
 
 void ATank::AimAt(FVector HitLocation) 
 {
-	TankAimingComponent->AimAt(HitLocation);
+	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
+}
+
+void ATank::SetBarrelReference(UTankBarrel * BarrelToSet)
+{
+	TankAimingComponent->SetBarrelReference(BarrelToSet);
 }
 
 // Sets default values

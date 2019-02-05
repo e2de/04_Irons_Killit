@@ -2,11 +2,15 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+
+#include "CoreMinimal.h"
 #include "TankAimingComponent.generated.h"
 
+// Forward Declaration
+class UTankBarrel; 
 
+//Hold barrel's props and methods
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class IRONSKILLIT_API UTankAimingComponent : public UActorComponent
 {
@@ -16,12 +20,12 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
-	void AimAt(FVector HitLocation);
+	void SetBarrelReference(UTankBarrel * BarrelToSet);
 
-	// Called when the game starts
-	virtual void BeginPlay() override;
-	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-		
+	void AimAt(FVector HitLocation, float LaunchSpeed);
+
+private:
+	UTankBarrel *Barrel = nullptr;
+
+	void MoveBarrel(FVector AimDirection);
 };

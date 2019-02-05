@@ -4,7 +4,6 @@
 
 #include "IronsKillit.h"
 #include "Public/Tank.h"
-#include "CoreMinimal.h"
 #include "AIController.h"
 #include "TankAIController.generated.h"
 
