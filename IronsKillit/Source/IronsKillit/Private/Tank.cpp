@@ -20,6 +20,17 @@ void ATank::SetBarrelReference(UTankBarrel * BarrelToSet)
 	} 
 }
 
+void ATank::SetTurretReference(UTankTurret * TurretToSet)
+{
+	if (!TurretToSet) {
+		UE_LOG(LogTemp, Error, TEXT("THERE IS NO TURRET ON TANK"));
+	}
+	else {
+		TankAimingComponent->SetTurretReference(TurretToSet);
+	}
+
+}
+
 // Sets default values
 ATank::ATank()
 {

@@ -1,11 +1,8 @@
 // Copyright Alice Meng 2019
 #include "TankPlayerController.h"
-#include "GameFramework/PlayerController.h"
 #include "Classes/Engine/World.h"
 #include "IronsKillit.h"
 #include "Public/Tank.h"
-#include "IronsKillit.h"
-#include "GameFramework/PlayerController.h"
 
 void ATankPlayerController::Tick(float DeltaTime)
 {
