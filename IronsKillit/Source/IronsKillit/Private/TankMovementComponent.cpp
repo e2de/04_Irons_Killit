@@ -6,17 +6,24 @@
 
 void UTankMovementComponent::Initialize(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet) 
 {
-	if (!LeftTrackToSet || !RightTrackToSet) { return;  }
 	LeftTrack = LeftTrackToSet;
 	RightTrack = RightTrackToSet;
 }
 
 void UTankMovementComponent::IntendMoveForward(float Throw) {
-	UE_LOG(LogTemp, Warning, TEXT("%f throw for IntendMoveForward"), Throw);
+	if (!LeftTrack || !RightTrack) { return; }
 
-	// TODO: fix movement
+	// TODO: fix movement when using both arrow and wasd
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(Throw);
 }
 
+void UTankMovementComponent::IntendTurnRight(float Throw)
+{
+	if (!LeftTrack || !RightTrack) { return; }
+
+	UE_LOG(LogTemp, Warning, TEXT("%f throw for IntendMoveright"), Throw);
+	LeftTrack->SetThrottle(Throw);
+	RightTrack->SetThrottle(-Throw);
+}
 
