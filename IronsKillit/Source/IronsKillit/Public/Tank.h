@@ -7,6 +7,7 @@
 class UTankBarrel;
 class UTankAimingComponent;
 class UTankTurret;
+class AProjectile;
 
 UCLASS()
 class IRONSKILLIT_API ATank : public APawn
@@ -41,4 +42,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = Firing)
 		float LaunchSpeed = 10000;
 
+	UPROPERTY(EditAnywhere, Category = Setup)
+		TSubclassOf<AProjectile> ProjectileBlueprint; //alternative is TSubclass
+
+	// Local barrel reference
+	UTankBarrel * Barrel = nullptr;
 };

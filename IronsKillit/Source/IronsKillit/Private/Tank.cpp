@@ -2,6 +2,9 @@
 
 #include "Tank.h"
 #include "TankAimingComponent.h"
+#include "Classes/Engine/World.h"
+#include "TankBarrel.h"
+#include "Projectile.h"
 
 
 
@@ -17,6 +20,7 @@ void ATank::SetBarrelReference(UTankBarrel * BarrelToSet)
 	}
 	else {
 		TankAimingComponent->SetBarrelReference(BarrelToSet);
+		Barrel = BarrelToSet;
 	} 
 }
 
@@ -33,7 +37,18 @@ void ATank::SetTurretReference(UTankTurret * TurretToSet)
 
 void ATank::Fire()
 {
+	if (!Barrel) { return; }
+
+	// spawn projectile at the end of the barrel
 	UE_LOG(LogTemp, Warning, TEXT("FIRE"));
+	bool bSocketExist = Barrel->DoesSocketExist("Projectile");
+
+	if (bSocketExist) {
+		auto ProjectileLocation = Barrel->GetSocketLocation(FName("Projectile"));
+		auto ProjectileRotation = Barrel->GetSocketRotation(FName("Projectile"));
+		AProjectile * Projectile = GetWorld()->SpawnActor <AProjectile>(ProjectileBlueprint,ProjectileLocation,ProjectileRotation);
+	}
+		
 }
 
 // Sets default values
