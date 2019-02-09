@@ -6,8 +6,6 @@ void UTankTrack::SetThrottle(float Throttle) {
 	auto Name = GetName();
 
 	auto forward = GetOwner()->GetActorForwardVector();
-	UE_LOG(LogTemp, Warning, TEXT("%s throttle forward is: %s"), *(Name),*(forward.ToString()));
-
 	// TODO: clamp actual throttle
 	auto ForceApplied = forward * Throttle * TrackMaxDrivingForce;
 	
