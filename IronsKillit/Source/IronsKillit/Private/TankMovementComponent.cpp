@@ -10,10 +10,9 @@ void UTankMovementComponent::Initialize(UTankTrack* LeftTrackToSet, UTankTrack* 
 	RightTrack = RightTrackToSet;
 }
 
-void UTankMovementComponent::IntendMoveForward(float Throw) {
+void UTankMovementComponent::IntendMoveForward(float Throw) 
+{
 	if (!LeftTrack || !RightTrack) { return; }
-
-	// TODO: fix movement when using both arrow and wasd
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(Throw);
 }
@@ -21,7 +20,6 @@ void UTankMovementComponent::IntendMoveForward(float Throw) {
 void UTankMovementComponent::IntendTurnRight(float Throw)
 {
 	if (!LeftTrack || !RightTrack) { return; }
-
 	//UE_LOG(LogTemp, Warning, TEXT("%f throw for IntendMoveright"), Throw);
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(-Throw);
@@ -32,11 +30,10 @@ void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, boo
 {
 	//auto TankName = GetOwner()->GetName();
 	//UE_LOG(LogTemp, Warning, TEXT("%s Name, MoveVelocity: %s"), *TankName, *(MoveVelocity.GetSafeNormal().ToString()));
-
 	auto AIForwardIntention = MoveVelocity.GetSafeNormal();
 	auto TankForwardDirection = GetOwner()->GetActorForwardVector().GetSafeNormal();
 
-	auto ForwardThrow = FVector::DotProduct(TankForwardDirection, AIForwardIntention);
+	auto ForwardThrow = FVector::DotProduct(AIForwardIntention, TankForwardDirection);
 	IntendMoveForward(ForwardThrow);
 
 	auto RightThrow = FVector::CrossProduct(AIForwardIntention, TankForwardDirection).Z;
