@@ -46,7 +46,10 @@ void ATank::Fire()
 	if (bSocketExist) {
 		auto ProjectileLocation = Barrel->GetSocketLocation(FName("Projectile"));
 		auto ProjectileRotation = Barrel->GetSocketRotation(FName("Projectile"));
-		AProjectile * Projectile = GetWorld()->SpawnActor <AProjectile>(ProjectileBlueprint,ProjectileLocation,ProjectileRotation);
+		auto Projectile = GetWorld()->SpawnActor <AProjectile>(ProjectileBlueprint,ProjectileLocation,ProjectileRotation);
+
+		//launch projectile
+		Projectile->LaunchProjectile(LaunchSpeed);
 	}
 		
 }
@@ -54,7 +57,7 @@ void ATank::Fire()
 // Sets default values
 ATank::ATank()
 {
-	// No need to protect ptrs, added at constrouction
+	// No need to protect ptrs, added at construction
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
 }
 
