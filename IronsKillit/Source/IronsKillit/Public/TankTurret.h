@@ -18,12 +18,12 @@ public:
 	void Azimuth(float RelativeSpeed);
 
 private:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 		float MaxDegreesPerSecond = 25;	// sensible default
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 		float MaxAzimuthDegrees = 0;	// sensible default
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 		float MinAzimuthDegrees = -360;	// sensible default
 };
