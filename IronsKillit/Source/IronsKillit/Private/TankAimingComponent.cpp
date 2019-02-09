@@ -26,14 +26,13 @@ void UTankAimingComponent::SetTurretReference(UTankTurret * TurretToSet)
 	Turret = TurretToSet;
 }
 
-
-
-
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
 	auto OurTankName = GetOwner()->GetName();
 	auto BarrelLocation = Barrel->GetSocketLocation(FName("Projectile"));
 	if (!Barrel) { return; }
+
+	// TODO: fix bad math on projectile aim
 
 	FVector TossVelocity;
 	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
@@ -53,7 +52,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 	if (bHaveAimSolution) {
 		auto AimDirection = TossVelocity.GetSafeNormal();
 		//UE_LOG(LogTemp, Warning, TEXT("%s aiming at: %s from %s"), *OurTankName, *HitLocation.ToString(), *(BarrelLocation.ToString()));
-		//UE_LOG(LogTemp, Warning, TEXT("%s will fire in this direction: %s"), *OurTankName, (*AimDirection.ToString()));
+		UE_LOG(LogTemp, Warning, TEXT("%s will fire in this direction: %s"), *OurTankName, (*AimDirection.ToString()));
 
 		MoveBarrel(AimDirection);
 		/*auto Time = GetWorld()->GetTimeSeconds();

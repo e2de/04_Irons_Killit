@@ -8,6 +8,7 @@ class UTankBarrel;
 class UTankAimingComponent;
 class UTankTurret;
 class AProjectile;
+class UTankTrack;
 
 UCLASS()
 class IRONSKILLIT_API ATank : public APawn
@@ -22,6 +23,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetTurretReference(UTankTurret * TurretToSet);
+
+	UFUNCTION(BlueprintCallable, Category = Setup)
+		void SetTankTrack(UTankTrack * TrackToSet);
 
 	UFUNCTION(BlueprintCallable)
 		void Fire();

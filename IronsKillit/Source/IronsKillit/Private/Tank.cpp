@@ -5,6 +5,7 @@
 #include "Classes/Engine/World.h"
 #include "TankBarrel.h"
 #include "Projectile.h"
+#include "TankTrack.h"
 
 
 
@@ -32,6 +33,11 @@ void ATank::SetTurretReference(UTankTurret * TurretToSet)
 	else {
 		TankAimingComponent->SetTurretReference(TurretToSet);
 	}
+
+}
+
+void ATank::SetTankTrack(UTankTrack * TrackToSet)
+{
 
 }
 
