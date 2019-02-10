@@ -64,4 +64,10 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 		TSubclassOf<AProjectile> ProjectileBlueprint; //alternative is TSubclass
+	
+	FVector AimDirection = FVector(0.f);
+
+	//to .01 tolerence
+	bool IsBarrelMoving() const;
+
 };
