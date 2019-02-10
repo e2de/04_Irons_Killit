@@ -19,7 +19,6 @@ AProjectile::AProjectile()
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 void AProjectile::LaunchProjectile(float Speed)
@@ -27,7 +26,6 @@ void AProjectile::LaunchProjectile(float Speed)
 	UE_LOG(LogTemp, Warning, TEXT("PROJECTILE"));
 	ProjectileMovementComponent->SetVelocityInLocalSpace(FVector::ForwardVector * Speed);
 	ProjectileMovementComponent->Activate();
-
 }
 
 // Called every frame
