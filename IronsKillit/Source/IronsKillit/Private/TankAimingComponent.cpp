@@ -36,12 +36,13 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 								ESuggestProjVelocityTraceOption::DoNotTrace,
 								FCollisionResponseParams::DefaultResponseParam,
 								TArray<AActor*>(),
-								false);		// change to true for debug line
+								true);		// change to true for debug line
 
 	if (bHaveAimSolution) {
 		AimDirection = TossVelocity.GetSafeNormal();
 		//UE_LOG(LogTemp, Warning, TEXT("%s aiming at: %s from %s"), *OurTankName, *HitLocation.ToString(), *(BarrelLocation.ToString()));
-		//UE_LOG(LogTemp, Warning, TEXT("%s will fire in this direction: %s"), *OurTankName, (*AimDirection.ToString()));
+		
+		//UE_LOG(LogTemp, Warning, TEXT("%s will fire in this direction: %f"), *OurTankName, AimDirection.Rotation().Yaw);
 		MoveBarrel(AimDirection);
 	}	
 }
@@ -58,10 +59,20 @@ void UTankAimingComponent::BeginPlay()
 	LastFireTime = FPlatformTime::Seconds();
 }
 
+void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
+{
+}
 
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
 {
-	if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
+}
+
+void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
+{
+	if (AmmoCount <= 0) {
+		FiringState = EFiringStatus::Out_Of_Ammo;
+	}
+	else if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
 	{
 		FiringState = EFiringStatus::Reloading;
 	}
@@ -84,6 +95,8 @@ void UTankAimingComponent::MoveBarrel(FVector AimDirection)
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
 	
 	Barrel->Elevate(DeltaRotator.Pitch); 
+	// make sure the turret isn't going the long way about
+	
 	Turret->Azimuth(DeltaRotator.Yaw);
 }
 
@@ -96,7 +109,7 @@ bool UTankAimingComponent::IsBarrelMoving() const
 
 void UTankAimingComponent::Fire()
 {
-	if (FiringState != EFiringStatus::Reloading)
+	if (FiringState == EFiringStatus::Locked || FiringState == EFiringStatus::Aiming)
 	{
 		if (!ensure(Barrel && ProjectileBlueprint)) { return; }
 		// spawn projectile at the end of the barrel
@@ -110,10 +123,19 @@ void UTankAimingComponent::Fire()
 			//launch projectile
 			Projectile->LaunchProjectile(LaunchSpeed);
 			LastFireTime = FPlatformTime::Seconds();
+			AmmoCount -= 1;
 		}
 	}
 
+}
 
+EFiringStatus UTankAimingComponent::GetFiringState() const
+{
+	return FiringState;
+}
 
+int UTankAimingComponent::GetAmmoLeft() const
+{
+	return AmmoCount;
 }
 

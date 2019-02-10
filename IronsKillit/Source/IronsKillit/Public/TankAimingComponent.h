@@ -12,7 +12,8 @@ enum class EFiringStatus : uint8
 {
 	Reloading,
 	Aiming,
-	Locked
+	Locked,
+	Out_Of_Ammo
 };
 
 // Forward Declaration
@@ -38,9 +39,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Firing")
 	void Fire();
 
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+	EFiringStatus GetFiringState() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+	int GetAmmoLeft() const;
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 	EFiringStatus FiringState = EFiringStatus::Aiming;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	TSubclassOf<AProjectile> ProjectileBlueprint;
 
 private:
 	// Called when the game starts or when spawned
@@ -61,13 +71,12 @@ private:
 		float ReloadTimeInSeconds = 3;
 
 	double LastFireTime = 0;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Setup")
-		TSubclassOf<AProjectile> ProjectileBlueprint; //alternative is TSubclass
 	
 	FVector AimDirection = FVector(0.f);
 
 	//to .01 tolerence
 	bool IsBarrelMoving() const;
+
+	int AmmoCount = 3;
 
 };

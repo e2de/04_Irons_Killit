@@ -13,8 +13,10 @@ void UTankMovementComponent::Initialize(UTankTrack* LeftTrackToSet, UTankTrack* 
 void UTankMovementComponent::IntendMoveForward(float Throw) 
 {
 	if (!ensure(LeftTrack && RightTrack)) { return; }
-	LeftTrack->SetThrottle(Throw);
+	//UE_LOG(LogTemp, Warning, TEXT("Throw: %f"), Throw);
 	RightTrack->SetThrottle(Throw);
+	LeftTrack->SetThrottle(Throw);
+
 }
 
 void UTankMovementComponent::IntendTurnRight(float Throw)
@@ -28,8 +30,6 @@ void UTankMovementComponent::IntendTurnRight(float Throw)
 
 void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, bool bForceMaxSpeed)
 {
-	//auto TankName = GetOwner()->GetName();
-	//UE_LOG(LogTemp, Warning, TEXT("%s Name, MoveVelocity: %s"), *TankName, *(MoveVelocity.GetSafeNormal().ToString()));
 	auto AIForwardIntention = MoveVelocity.GetSafeNormal();
 	auto TankForwardDirection = GetOwner()->GetActorForwardVector().GetSafeNormal();
 
