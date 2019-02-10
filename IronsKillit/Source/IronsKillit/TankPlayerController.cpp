@@ -3,7 +3,6 @@
 #include "Classes/Engine/World.h"
 #include "IronsKillit.h"
 #include "TankAimingComponent.h"
-#include "Public/Tank.h"
 
 void ATankPlayerController::Tick(float DeltaTime)
 {
@@ -14,29 +13,23 @@ void ATankPlayerController::Tick(float DeltaTime)
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	UE_LOG(LogTemp, Warning, TEXT("PlayerController Begin Play"));
 
-	auto ControlledTank = GetControlledTank();
-	auto AimingComponent = ControlledTank->FindComponentByClass<UTankAimingComponent>();
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 	if (ensure(AimingComponent)) {
 		FoundAimingComponent(AimingComponent);
 	}
-	else {
-		UE_LOG(LogTemp, Error, TEXT("NO AIMING COMPONENT at begin play"));
-	}
-
-
 
 }
 
 // start tank moving the barrel so show will hit where crosshair intersects world
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	if (!ensure(GetControlledTank())) { return; }
+	if (!ensure(GetPawn())) { return; }
 
 	FVector HitLocation; // Out parameter
 	if (GetSightRayHitLocation(HitLocation)) {
-		GetControlledTank()->AimAt(HitLocation);
+
+		GetPawn()->FindComponentByClass<UTankAimingComponent>()->AimAt(HitLocation);
 	}
 
 	return;
@@ -44,9 +37,6 @@ void ATankPlayerController::AimTowardsCrosshair()
 
 bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation)const
 {
-	// Get world location of linetrace through crosshair
-
-	// find crosshair
 	int32 ViewportSizeX, ViewportSizeY;
 	GetViewportSize(ViewportSizeX, ViewportSizeY);
 
@@ -79,7 +69,7 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector& HitLocation, FVect
 	FHitResult HitResult;
 	auto StartLocation = PlayerCameraManager->GetCameraLocation();
 	auto EndLocation = StartLocation + (LookDirection * LineTraceRange);
-	FCollisionQueryParams QueryParams = FCollisionQueryParams("", false, GetControlledTank());
+	FCollisionQueryParams QueryParams = FCollisionQueryParams("", false, GetPawn());
 	
 	if (GetWorld()->LineTraceSingleByChannel(
 					HitResult, 
@@ -92,12 +82,6 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector& HitLocation, FVect
 	}
 	HitLocation = FVector(0);
 	return false;
-}
-
-ATank* ATankPlayerController::GetControlledTank() const 
-{
-	ATank* TestPawn = Cast<ATank>(GetPawn());
-	return TestPawn;
 }
 
 

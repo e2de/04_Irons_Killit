@@ -4,6 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "Public/Tank.h"
 #include "GameFramework/PlayerController.h"
+#include "TankAimingComponent.h"
 #include "Engine/World.h"
 #include "IronsKillit.h"
 
@@ -17,14 +18,14 @@ void ATankAIController::Tick(float DeltaTime)
 	auto PlayerControlledTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
 
 	if (ensure(AIControlledTank)) {
-		// TODO move towards player
 		MoveToActor(PlayerControlledTank, AcceptanceRadius);
 
 		// Aim towards the player
-		AIControlledTank->AimAt(PlayerControlledTank->GetActorLocation());
+		auto AimComponent = AIControlledTank->FindComponentByClass<UTankAimingComponent>();
+		AimComponent->AimAt(PlayerControlledTank->GetActorLocation());
 
 		// FIRE if ready (limit fire rate)
-		AIControlledTank->Fire();
+		AimComponent->Fire();
 	}
 	
 }

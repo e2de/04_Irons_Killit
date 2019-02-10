@@ -7,6 +7,8 @@
 #include "TankBarrel.h"
 #include "Tank.h"
 #include "TankTurret.h"
+#include "Projectile.h"
+#include "Classes/Engine/World.h"
 
 
 // Sets default values for this component's properties
@@ -15,7 +17,7 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
-void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
+void UTankAimingComponent::AimAt(FVector HitLocation)
 {
 	auto OurTankName = GetOwner()->GetName();
 	auto BarrelLocation = Barrel->GetSocketLocation(FName("Projectile"));
@@ -36,21 +38,14 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 								ESuggestProjVelocityTraceOption::DoNotTrace,
 								FCollisionResponseParams::DefaultResponseParam,
 								TArray<AActor*>(),
-								true);
+								false);		// change to true for debug line
 
 	if (bHaveAimSolution) {
 		auto AimDirection = TossVelocity.GetSafeNormal();
 		//UE_LOG(LogTemp, Warning, TEXT("%s aiming at: %s from %s"), *OurTankName, *HitLocation.ToString(), *(BarrelLocation.ToString()));
 		//UE_LOG(LogTemp, Warning, TEXT("%s will fire in this direction: %s"), *OurTankName, (*AimDirection.ToString()));
-
 		MoveBarrel(AimDirection);
-
-	}
-	else {
-		//auto Time = GetWorld()->GetTimeSeconds();
-		//UE_LOG(LogTemp, Warning, TEXT("%f: NO aim solve called already"), Time);
-	}
-	
+	}	
 }
 
 void UTankAimingComponent::Initialize(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet)
@@ -74,3 +69,27 @@ void UTankAimingComponent::MoveBarrel(FVector AimDirection)
 	Barrel->Elevate(DeltaRotator.Pitch); 
 	Turret->Azimuth(DeltaRotator.Yaw);
 }
+
+void UTankAimingComponent::Fire()
+{
+	bool bIsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
+	if (ensure(Barrel) && bIsReloaded)
+	{
+		// spawn projectile at the end of the barrel
+		bool bSocketExist = Barrel->DoesSocketExist("Projectile");
+
+		if (bSocketExist) {
+			auto ProjectileLocation = Barrel->GetSocketLocation(FName("Projectile"));
+			auto ProjectileRotation = Barrel->GetSocketRotation(FName("Projectile"));
+			auto Projectile = GetWorld()->SpawnActor <AProjectile>(ProjectileBlueprint, ProjectileLocation, ProjectileRotation);
+
+			//launch projectile
+			Projectile->LaunchProjectile(LaunchSpeed);
+			LastFireTime = FPlatformTime::Seconds();
+		}
+	}
+
+
+
+}
+
