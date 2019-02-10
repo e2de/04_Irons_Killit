@@ -5,7 +5,6 @@
 void UTankTrack::SetThrottle(float Throttle) {
 	auto Name = GetName();
 
-	//auto forward = GetOwner()->GetActorForwardVector();
 	auto forward = GetForwardVector();
 	// TODO: clamp actual throttle
 	auto ForceApplied = forward * Throttle * TrackMaxDrivingForce;

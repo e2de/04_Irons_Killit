@@ -13,9 +13,11 @@ class IRONSKILLIT_API ATankPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
+protected:
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+		ATank* GetControlledTank() const;
+
 private:
-	ATank* GetControlledTank() const;
-	
 	void Tick(float DeltaTime) override;
 
 	virtual void BeginPlay()  override;

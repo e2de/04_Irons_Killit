@@ -2,7 +2,6 @@
 
 #include "Tank.h"
 #include "TankAimingComponent.h"
-#include "TankMovementComponent.h"
 #include "Classes/Engine/World.h"
 #include "TankBarrel.h"
 #include "Projectile.h"
@@ -12,35 +11,11 @@
 
 void ATank::AimAt(FVector HitLocation) 
 {
+	auto TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
 	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 }
 
-void ATank::SetBarrelReference(UTankBarrel * BarrelToSet)
-{
-	if (!BarrelToSet) {
-		UE_LOG(LogTemp, Error, TEXT("THERE IS NO BARREL ON TANK"));
-	}
-	else {
-		TankAimingComponent->SetBarrelReference(BarrelToSet);
-		Barrel = BarrelToSet;
-	} 
-}
 
-void ATank::SetTurretReference(UTankTurret * TurretToSet)
-{
-	if (!TurretToSet) {
-		UE_LOG(LogTemp, Error, TEXT("THERE IS NO TURRET ON TANK"));
-	}
-	else {
-		TankAimingComponent->SetTurretReference(TurretToSet);
-	}
-
-}
-
-void ATank::SetTankTrack(UTankTrack * TrackToSet)
-{
-
-}
 
 void ATank::Fire()
 {
@@ -69,8 +44,6 @@ void ATank::Fire()
 // Sets default values
 ATank::ATank()
 {
-	// No need to protect ptrs, added at construction
-	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
 
 }
 
