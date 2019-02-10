@@ -12,6 +12,8 @@
 void ATank::AimAt(FVector HitLocation) 
 {
 	auto TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
+
+	if (!ensure(TankAimingComponent)) { return; }
 	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 }
 
@@ -20,10 +22,9 @@ void ATank::AimAt(FVector HitLocation)
 void ATank::Fire()
 {
 	bool bIsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
-	if (Barrel && bIsReloaded) 
+	if (ensure(Barrel) && bIsReloaded) 
 	{
 		// spawn projectile at the end of the barrel
-		UE_LOG(LogTemp, Warning, TEXT("FIRE"));
 		bool bSocketExist = Barrel->DoesSocketExist("Projectile");
 
 		if (bSocketExist) {

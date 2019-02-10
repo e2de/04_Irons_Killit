@@ -19,7 +19,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
 	auto OurTankName = GetOwner()->GetName();
 	auto BarrelLocation = Barrel->GetSocketLocation(FName("Projectile"));
-	if (!Barrel) { return; }
+	if (!ensure(Barrel)) { return; }
 
 	// TODO: fix bad math on projectile aim
 
@@ -63,7 +63,7 @@ void UTankAimingComponent::Initialize(UTankBarrel * BarrelToSet, UTankTurret * T
 
 void UTankAimingComponent::MoveBarrel(FVector AimDirection)
 {
-	if (!Barrel || !Turret) { return; }
+	if (!ensure(Barrel && Turret)) { return; }
 
 	// find Difference between the current barrel rotation and aim direction
 	auto CurrentBarrel = GetOwner();

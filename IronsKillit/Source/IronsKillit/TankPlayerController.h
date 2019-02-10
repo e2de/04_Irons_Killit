@@ -7,7 +7,10 @@
 
 
 class ATank;
-
+class UTankAimingComponent;
+/*
+* Responsible for helping the player aim
+*/
 UCLASS()
 class IRONSKILLIT_API ATankPlayerController : public APlayerController
 {
@@ -17,6 +20,9 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 		ATank* GetControlledTank() const;
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+		void FoundAimingComponent(UTankAimingComponent * AimCompRef);
+
 private:
 	void Tick(float DeltaTime) override;
 
@@ -25,7 +31,6 @@ private:
 	// start tank moving the barrel so show will hit where crosshair intersects world
 	void AimTowardsCrosshair();
 
-	// find where the crosshair is hitting
 	bool GetSightRayHitLocation(FVector&) const;
 
 	bool GetLookDirection(FVector2D ScreenLocation, FVector & LookDirection) const;
