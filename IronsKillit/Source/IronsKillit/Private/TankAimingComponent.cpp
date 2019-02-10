@@ -13,7 +13,7 @@
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
 {
-	// ...
+	PrimaryComponentTick.bCanEverTick = true;
 }
 
 void UTankAimingComponent::AimAt(FVector HitLocation)
@@ -23,7 +23,6 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 	if (!ensure(Barrel)) { return; }
 
 	// TODO: fix bad math on projectile aim
-
 	FVector TossVelocity;
 	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
 								this,
@@ -53,7 +52,21 @@ void UTankAimingComponent::Initialize(UTankBarrel * BarrelToSet, UTankTurret * T
 	Turret = TurretToSet;
 }
 
+void UTankAimingComponent::BeginPlay()
+{
+	// so first fire is after initial reload
+	LastFireTime = FPlatformTime::Seconds();
+}
 
+
+void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
+{
+	if ((FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds)
+	{
+		FiringState = EFiringStatus::Reloading;
+	}
+	//TODO aiming and locked
+}
 
 void UTankAimingComponent::MoveBarrel(FVector AimDirection)
 {
@@ -71,11 +84,9 @@ void UTankAimingComponent::MoveBarrel(FVector AimDirection)
 
 void UTankAimingComponent::Fire()
 {
-	if (!ensure(Barrel && ProjectileBlueprint)) { return; }
-
-	bool bIsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
-	if (bIsReloaded)
+	if (FiringState != EFiringStatus::Reloading)
 	{
+		if (!ensure(Barrel && ProjectileBlueprint)) { return; }
 		// spawn projectile at the end of the barrel
 		bool bSocketExist = Barrel->DoesSocketExist("Projectile");
 
