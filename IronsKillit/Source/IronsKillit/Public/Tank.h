@@ -16,15 +16,17 @@ class IRONSKILLIT_API ATank : public APawn
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BLueprintPure)
+	UFUNCTION(BlueprintPure)
 	float GetHealthPercent() const;
 
 	UPROPERTY(BlueprintAssignable)
-		FTankDelegate OnTankDeath;
+	FTankDelegate OnTankDeath;
 	
 private:
 	// Sets default values for this pawn's properties
 	ATank();
+
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -32,10 +34,9 @@ private:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
-
 	UPROPERTY(EditDefaultsOnly, Category = "Health")
-		int32 StartingHealth = 100;
-	UPROPERTY(VisibleAnywhere, Category="Health")
-	int32 CurrentHealth = StartingHealth;
+	int32 StartingHealth = 100;
+
+	UPROPERTY(EditDefaultsOnly, Category="Health")
+	int32 CurrentHealth0 = 0;
 };

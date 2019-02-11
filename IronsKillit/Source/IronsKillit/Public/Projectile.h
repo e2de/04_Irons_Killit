@@ -28,6 +28,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Components")
+		URadialForceComponent* ExplosionForce = nullptr;
   
 private:
 	UFUNCTION()
@@ -45,9 +48,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 		UParticleSystemComponent* ImpactBlast = nullptr;
-
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-		URadialForceComponent* ExplosionForce = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category="Setup")
 		float DestroyDelay = 10.f;

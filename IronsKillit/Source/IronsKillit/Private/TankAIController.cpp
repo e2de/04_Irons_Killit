@@ -9,6 +9,7 @@
 #include "Tank.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/GameStateBase.h"
+//#include "GameFramework/Pawn.h"
 
 
 void ATankAIController::Tick(float DeltaTime)
@@ -50,7 +51,7 @@ void ATankAIController::SetPawn(APawn * InPawn)
 void ATankAIController::OnDeath()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Tank Death delegate call AI"));
-	
+	GetPawn()->DetachFromControllerPendingDestroy();
 }
 
 void ATankAIController::BeginPlay()

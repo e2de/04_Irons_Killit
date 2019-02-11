@@ -49,6 +49,7 @@ void UTankTrack::DriveTrack (float Throttle){
 	auto forward = GetForwardVector();
 	auto ForceApplied = forward * Throttle * TrackMaxDrivingForce;
 
+
 	auto ForceLocation = GetComponentLocation();
 	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
 	TankRoot->AddForceAtLocation(ForceApplied, ForceLocation);

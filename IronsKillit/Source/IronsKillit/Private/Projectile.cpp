@@ -52,18 +52,18 @@ void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor,
 	ImpactBlast->Activate();
 	ExplosionForce->AttachToComponent(HitComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	ExplosionForce->FireImpulse();
-	
-	SetRootComponent(ImpactBlast);
-	CollisionMesh->DestroyComponent();
 
 	UGameplayStatics::ApplyRadialDamage(
 		this,
 		ProjectileDamage,
 		GetActorLocation(),
-		ExplosionForce->Radius,	//for consistency
+		ExplosionForce->Radius,	// for consistency
 		UDamageType::StaticClass(),
-		TArray<AActor*>()
+		TArray<AActor*>()		// damage all actors
 	);
+	
+	SetRootComponent(ImpactBlast);
+	CollisionMesh->DestroyComponent();
 
 	// Timer until the Projectile is destroyed:
 	FTimerHandle ProjectileTimer;
@@ -77,7 +77,6 @@ void AProjectile::OnTimerExpire() {
 
 void AProjectile::LaunchProjectile(float Speed)
 {
-	UE_LOG(LogTemp, Warning, TEXT("PROJECTILE"));
 	ProjectileMovement->SetVelocityInLocalSpace(FVector::ForwardVector * Speed);
 	ProjectileMovement->Activate();
 }

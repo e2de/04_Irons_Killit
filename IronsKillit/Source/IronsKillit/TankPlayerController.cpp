@@ -8,7 +8,9 @@
 void ATankPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	AimTowardsCrosshair();
+	if (GetPawn()) {
+		AimTowardsCrosshair();
+	}
 }
 
 void ATankPlayerController::BeginPlay()
@@ -101,6 +103,7 @@ void ATankPlayerController::SetPawn(APawn * InPawn)
 void ATankPlayerController::OnDeath()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Tank Death delegate call PLAYER"));
+	StartSpectatingOnly();
 }
 
 
