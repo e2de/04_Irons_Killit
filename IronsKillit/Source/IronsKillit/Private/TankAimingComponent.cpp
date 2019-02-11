@@ -18,7 +18,6 @@ UTankAimingComponent::UTankAimingComponent()
 
 void UTankAimingComponent::AimAt(FVector HitLocation)
 {
-	auto OurTankName = GetOwner()->GetName();
 	auto BarrelLocation = Barrel->GetSocketLocation(FName("Projectile"));
 	if (!ensure(Barrel)) { return; }
 
@@ -61,14 +60,6 @@ void UTankAimingComponent::BeginPlay()
 
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
 {
-}
-
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
-{
-}
-
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
-{
 	if (AmmoCount <= 0) {
 		FiringState = EFiringStatus::Out_Of_Ammo;
 	}
@@ -89,15 +80,19 @@ void UTankAimingComponent::MoveBarrel(FVector AimDirection)
 	if (!ensure(Barrel && Turret)) { return; }
 
 	// find Difference between the current barrel rotation and aim direction
-	auto CurrentBarrel = GetOwner();
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
 	
 	Barrel->Elevate(DeltaRotator.Pitch); 
 	// make sure the turret isn't going the long way about
-	
-	Turret->Azimuth(DeltaRotator.Yaw);
+	if (FMath::Abs(DeltaRotator.Yaw) < 180) {
+		Turret->Azimuth(DeltaRotator.Yaw);
+	}
+	else {
+		Turret->Azimuth(-DeltaRotator.Yaw);
+	}
+
 }
 
 bool UTankAimingComponent::IsBarrelMoving() const

@@ -12,6 +12,7 @@ void UTankMovementComponent::Initialize(UTankTrack* LeftTrackToSet, UTankTrack* 
 
 void UTankMovementComponent::IntendMoveForward(float Throw) 
 {
+	// TODO review moving issue where moving forward is just turning
 	if (!ensure(LeftTrack && RightTrack)) { return; }
 	//UE_LOG(LogTemp, Warning, TEXT("Throw: %f"), Throw);
 	RightTrack->SetThrottle(Throw);

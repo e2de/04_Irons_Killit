@@ -22,7 +22,7 @@ class UTankTurret;
 class AProjectile;
 
 //Hold barrel's props and methods
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class IRONSKILLIT_API UTankAimingComponent : public UActorComponent
 {
 	GENERATED_BODY()
