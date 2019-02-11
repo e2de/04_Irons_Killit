@@ -5,6 +5,10 @@
 #include "Classes/Components/StaticMeshComponent.h"
 #include "Components/PrimitiveComponent.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "PhysicsEngine/RadialForceComponent.h"
+#include "GameFramework/Actor.h"
+#include "Public/TimerManager.h"
+#include "Classes/Engine/EngineTypes.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -21,12 +25,15 @@ AProjectile::AProjectile()
 	LaunchBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
 	ImpactBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Impact Blast"));
-	ImpactBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	//ImpactBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	ImpactBlast->SetAutoActivate(false);
 
 	// No need to protect ptrs, added at construction
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Projectile Movement"));
 	ProjectileMovement->SetAutoActivate(false);
+
+	ExplosionForce = CreateDefaultSubobject<URadialForceComponent>(FName("Explosion Force"));
+	ExplosionForce->bIgnoreOwningActor = true;
 
 }
 
@@ -42,6 +49,19 @@ void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor,
 	UE_LOG(LogTemp, Error, TEXT("HIT! donkey"));
 	LaunchBlast->Deactivate();
 	ImpactBlast->Activate();
+	ExplosionForce->AttachToComponent(HitComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	ExplosionForce->FireImpulse();
+	
+	SetRootComponent(ImpactBlast);
+	CollisionMesh->DestroyComponent();
+
+	FTimerHandle ProjectileTimer;
+	GetWorld()->GetTimerManager().SetTimer(ProjectileTimer, this, &AProjectile::OnTimerExpire , DestroyDelay, false);
+
+}
+
+void AProjectile::OnTimerExpire() {
+	this->Destroy();
 }
 
 void AProjectile::LaunchProjectile(float Speed)
