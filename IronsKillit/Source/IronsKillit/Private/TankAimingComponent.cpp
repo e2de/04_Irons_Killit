@@ -35,7 +35,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 								ESuggestProjVelocityTraceOption::DoNotTrace,
 								FCollisionResponseParams::DefaultResponseParam,
 								TArray<AActor*>(),
-								true);		// change to true for debug line
+								false);		// change to true for debug line
 
 	if (bHaveAimSolution) {
 		AimDirection = TossVelocity.GetSafeNormal();
