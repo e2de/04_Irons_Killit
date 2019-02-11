@@ -9,6 +9,8 @@
 #include "GameFramework/Actor.h"
 #include "Public/TimerManager.h"
 #include "Classes/Engine/EngineTypes.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/DamageType.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -46,7 +48,6 @@ void AProjectile::BeginPlay()
 
 void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit)
 {
-	UE_LOG(LogTemp, Error, TEXT("HIT! donkey"));
 	LaunchBlast->Deactivate();
 	ImpactBlast->Activate();
 	ExplosionForce->AttachToComponent(HitComponent, FAttachmentTransformRules::KeepRelativeTransform);
@@ -55,6 +56,16 @@ void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor,
 	SetRootComponent(ImpactBlast);
 	CollisionMesh->DestroyComponent();
 
+	UGameplayStatics::ApplyRadialDamage(
+		this,
+		ProjectileDamage,
+		GetActorLocation(),
+		ExplosionForce->Radius,	//for consistency
+		UDamageType::StaticClass(),
+		TArray<AActor*>()
+	);
+
+	// Timer until the Projectile is destroyed:
 	FTimerHandle ProjectileTimer;
 	GetWorld()->GetTimerManager().SetTimer(ProjectileTimer, this, &AProjectile::OnTimerExpire , DestroyDelay, false);
 

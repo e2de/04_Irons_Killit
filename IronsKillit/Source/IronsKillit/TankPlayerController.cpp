@@ -3,6 +3,7 @@
 #include "Classes/Engine/World.h"
 #include "IronsKillit.h"
 #include "TankAimingComponent.h"
+#include "Tank.h"
 
 void ATankPlayerController::Tick(float DeltaTime)
 {
@@ -82,6 +83,24 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector& HitLocation, FVect
 	}
 	HitLocation = FVector(0);
 	return false;
+}
+
+void ATankPlayerController::SetPawn(APawn * InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (InPawn)
+	{
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank)) { return; }
+
+		// subscribe our local method to the tank's death event
+		PossessedTank->OnTankDeath.AddUniqueDynamic(this, &ATankPlayerController::OnDeath);
+	}
+}
+
+void ATankPlayerController::OnDeath()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Tank Death delegate call PLAYER"));
 }
 
 

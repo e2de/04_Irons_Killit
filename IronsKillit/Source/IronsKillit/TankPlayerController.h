@@ -6,6 +6,7 @@
 
 class ATank;
 class UTankAimingComponent;
+
 /*
 * Responsible for helping the player aim
 */
@@ -41,7 +42,10 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 		int32 LineTraceRange = 1000000;
 
+	virtual void SetPawn(APawn* InPawn) override;
 
+	UFUNCTION()
+		void OnDeath();
 
 };
 
