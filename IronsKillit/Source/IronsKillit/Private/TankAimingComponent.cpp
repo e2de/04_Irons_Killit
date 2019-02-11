@@ -55,6 +55,7 @@ void UTankAimingComponent::Initialize(UTankBarrel * BarrelToSet, UTankTurret * T
 
 void UTankAimingComponent::BeginPlay()
 {
+	Super::BeginPlay();
 	// so first fire is after initial reload
 	LastFireTime = FPlatformTime::Seconds();
 }

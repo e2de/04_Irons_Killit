@@ -18,6 +18,7 @@ void ATankAIController::Tick(float DeltaTime)
 
 	auto AIControlledTank = GetPawn();
 	auto PlayerControlledTank = GetWorld()->GetFirstPlayerController()->GetPawn();
+	if (!PlayerControlledTank) { return; }
 
 	if (ensure(AIControlledTank)) {
 		MoveToActor(PlayerControlledTank, AcceptanceRadius);
@@ -51,6 +52,7 @@ void ATankAIController::SetPawn(APawn * InPawn)
 void ATankAIController::OnDeath()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Tank Death delegate call AI"));
+	if (!GetPawn()) { return; }
 	GetPawn()->DetachFromControllerPendingDestroy();
 }
 
