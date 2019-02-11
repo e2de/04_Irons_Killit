@@ -46,10 +46,11 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 	}	
 }
 
-void UTankAimingComponent::Initialize(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet)
+void UTankAimingComponent::Initialize(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet, TSubclassOf<AProjectile> ProjectileBlueprintToSet)
 {
 	Barrel = BarrelToSet;
 	Turret = TurretToSet;
+	ProjectileBlueprint = ProjectileBlueprintToSet;
 }
 
 void UTankAimingComponent::BeginPlay()
@@ -129,7 +130,7 @@ EFiringStatus UTankAimingComponent::GetFiringState() const
 	return FiringState;
 }
 
-int UTankAimingComponent::GetAmmoLeft() const
+int32 UTankAimingComponent::GetAmmoLeft() const
 {
 	return AmmoCount;
 }

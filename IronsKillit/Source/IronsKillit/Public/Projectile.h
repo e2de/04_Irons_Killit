@@ -6,7 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "Projectile.generated.h"
 
+
 class UProjectileMovementComponent;
+class UParticleSystemComponent;
 
 UCLASS()
 class IRONSKILLIT_API AProjectile : public AActor
@@ -25,8 +27,15 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+  
+private:
+	UProjectileMovementComponent* ProjectileMovement = nullptr;
 
-	UProjectileMovementComponent* ProjectileMovementComponent = nullptr;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+		UStaticMeshComponent* CollisionMesh = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+		UParticleSystemComponent* LaunchBlast = nullptr;
 
 
 
