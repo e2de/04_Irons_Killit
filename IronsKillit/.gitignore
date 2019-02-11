@@ -1,5 +1,6 @@
 # Visual Studio 2015 user specific files
 .vs/
+IronsKillit.VC.VC.opendb
 
 # Compiled Object files
 *.slo
