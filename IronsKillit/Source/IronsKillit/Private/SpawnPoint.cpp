@@ -19,6 +19,7 @@ USpawnPoint::USpawnPoint()
 void USpawnPoint::BeginPlay()
 {
 	Super::BeginPlay();
+
 	//auto NewActor = GetWorld()->SpawnActor<AActor>(SpawnClass);
 	auto NewActor = GetWorld()->SpawnActorDeferred<AActor>(SpawnClass, GetComponentTransform());
 	if (!NewActor) { return;  }
