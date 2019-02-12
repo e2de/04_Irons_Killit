@@ -8,6 +8,7 @@
 #include "SprungWheel.generated.h"
 
 class USphereComponent;
+class UPrimitiveComponent;
 
 UCLASS()
 class IRONSKILLIT_API ASprungWheel : public AActor
@@ -30,6 +31,9 @@ protected:
 private:
 	void SetupConstraints();
 
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
 	//Components
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USphereComponent * Wheel = nullptr;
@@ -43,4 +47,7 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 		UPhysicsConstraintComponent * AxelWheelConstraint = nullptr;
 
+	float TotalForceMagnitudeThisFrame = 0.f;
+
+	void ApplyForce();
 };
